@@ -18,9 +18,6 @@ jobs:
         run: pip install pytest requests
 
       - name: Run tests
-        run: pytest test_first.py test_fixtures.py test_params.py test_api.py test_post.py -v
-
-      - name: Run tests
         env:
           FOOTBALL_TOKEN: ${{ secrets.FOOTBALL_TOKEN }}
         run: pytest test_first.py test_fixtures.py test_params.py test_api.py test_post.py test_football.py -v
