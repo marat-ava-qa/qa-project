@@ -23,7 +23,7 @@ jobs:
         run: pytest test_first.py test_fixtures.py test_params.py test_api.py test_post.py test_football.py -v --alluredir=allure-results
 
       - name: Generate Allure report
-        uses: simple-elf/allure-report-action@v1.12
+        uses: simple-elf/allure-report-action@master
         if: always()
         with:
           allure_results: allure-results
