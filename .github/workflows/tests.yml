@@ -20,8 +20,7 @@ jobs:
       - name: Run tests
         env:
           FOOTBALL_TOKEN: ${{ secrets.FOOTBALL_TOKEN }}
-        run: pytest test_first.py test_fixtures.py test_params.py test_api.py test_post.py test_football.py -v --alluredir=allure-results
-
+        run: pytest tests/ -v --alluredir=allure-results
       - name: Generate Allure report
         uses: simple-elf/allure-report-action@master
         if: always()

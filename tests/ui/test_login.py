@@ -1,6 +1,6 @@
 from selenium import webdriver
 import pytest
-from pages import LoginPage, ProductsPage
+from pages.login_page import LoginPage, ProductsPage
 from selenium.webdriver.chrome.options import Options
 
 @pytest.fixture
