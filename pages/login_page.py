@@ -31,6 +31,7 @@ class LoginPage:
         return button is not None
 
 class ProductsPage:
+    
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(driver, 10)
@@ -40,3 +41,29 @@ class ProductsPage:
             EC.visibility_of_element_located((By.CLASS_NAME, "title"))
         )
         return title.text
+    
+    def add_backpack_to_cart(self):
+        self.driver.find_element(By.ID, "add-to-cart-sauce-labs-backpack").click()
+
+
+    def get_cart_badge_count(self):
+        badge = self.wait.until(
+            EC.visibility_of_element_located((By.CLASS_NAME, "shopping_cart_badge"))
+        )
+        return badge.text
+    
+    
+class CartPage:
+    def __init__(self, driver):
+        self.driver = driver
+        self.wait = WebDriverWait(driver, 10)
+
+    def open_cart(self):
+        self.driver.find_element(By.CLASS_NAME, "shopping_cart_link").click()
+
+    def get_first_item_name(self):
+        first = self.wait.until(
+            EC.visibility_of_element_located((By.CLASS_NAME, "inventory_item_name"))
+            )
+        return  first.text
+    
