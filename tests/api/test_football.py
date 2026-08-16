@@ -46,3 +46,18 @@ def test_match_has_status():
     response = requests.get(f"{BASE_URL}/competitions/WC/matches", headers=HEADERS)
     data = response.json()
     assert "status" in data["matches"][0]
+
+# LA LIGA 
+def test_la_liga_exists():
+    response = requests.get(f"{BASE_URL}/competitions/PD", headers=HEADERS)
+    assert response.status_code == 200
+    
+def test_la_liga_teams_count():
+    response = requests.get(f"{BASE_URL}/competitions/PD/teams", headers=HEADERS)
+    data = response.json()
+    assert len(data["teams"]) == 20
+
+def test_la_liga_first_team_has_name():
+    response = requests.get(f"{BASE_URL}/competitions/PD/teams", headers=HEADERS)
+    data = response.json()
+    assert "name" in data["teams"][0]
