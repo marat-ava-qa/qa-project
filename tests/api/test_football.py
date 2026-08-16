@@ -1,13 +1,14 @@
 import requests
 import os
+import pytest
 
 TOKEN = os.getenv("FOOTBALL_TOKEN")
 HEADERS = {"X-Auth-Token": TOKEN}
 BASE_URL = "https://api.football-data.org/v4"
 
-
-def test_world_cup_exists():
-    response = requests.get(f"{BASE_URL}/competitions/WC", headers=HEADERS)
+@pytest.mark.parametrize("league", ["WC", "PD", "PL", "CL"])
+def test_league_exists(league):
+    response = requests.get(f"{BASE_URL}/competitions/{league}", headers=HEADERS)
     assert response.status_code == 200
 
 
@@ -47,11 +48,7 @@ def test_match_has_status():
     data = response.json()
     assert "status" in data["matches"][0]
 
-# LA LIGA 
-def test_la_liga_exists():
-    response = requests.get(f"{BASE_URL}/competitions/PD", headers=HEADERS)
-    assert response.status_code == 200
-    
+# LA LIGA     
 def test_la_liga_teams_count():
     response = requests.get(f"{BASE_URL}/competitions/PD/teams", headers=HEADERS)
     data = response.json()
@@ -61,3 +58,8 @@ def test_la_liga_first_team_has_name():
     response = requests.get(f"{BASE_URL}/competitions/PD/teams", headers=HEADERS)
     data = response.json()
     assert "name" in data["teams"][0]
+    
+# Not Found negative test
+def test_unknown_league():
+    response = requests.get(f"{BASE_URL}/competitions/XXXX", headers=HEADERS)
+    assert response.status_code == 404
