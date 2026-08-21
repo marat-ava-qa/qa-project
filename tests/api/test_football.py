@@ -69,3 +69,14 @@ def test_la_liga_first_team_has_name():
     data = response.json()
     assert "name" in data["teams"][0]
     
+
+def test_la_liga_match_has_status():
+    response = get_with_retry(f"{BASE_URL}/competitions/PD/matches", headers=HEADERS)
+    data = response.json()
+    assert "status" in data["matches"][0]
+    
+# APL
+def test_premier_league_match_has_status():
+    response = get_with_retry(f"{BASE_URL}/competitions/PD/matches", headers=HEADERS)
+    data = response.json()
+    assert "status" in data["matches"][0]
