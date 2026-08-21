@@ -8,10 +8,13 @@ HEADERS = {"X-Auth-Token": TOKEN}
 BASE_URL = "https://api.football-data.org/v4"
 
 def get_with_retry(url, headers, retries=5):
-    for attempt in range(retries):             
-        response = requests.get(url, headers=headers)
-        if response.status_code != 429:         
-            return response                       
+    for attempt in range(retries): 
+        try:            
+            response = requests.get(url, headers=headers)
+            if response.status_code != 429:         
+                return response
+        except requests.exceptions.RecursionExpection:   #network flaky
+            pass                                          #try again
         time.sleep(10)                            
     return response 
 
