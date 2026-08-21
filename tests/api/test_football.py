@@ -1,6 +1,7 @@
 import requests
 import os
 import pytest
+import time
 
 TOKEN = os.getenv("FOOTBALL_TOKEN")
 HEADERS = {"X-Auth-Token": TOKEN}
@@ -11,6 +12,13 @@ def test_league_exists(league):
     response = requests.get(f"{BASE_URL}/competitions/{league}", headers=HEADERS)
     assert response.status_code == 200
 
+def get_with_retry(url, headers, retries=3):
+    for attempt in range(retries):             
+        response = requests.get(url, headers=headers)
+        if response.status_code != 429:         
+            return response                       
+        time.sleep(2)                            
+    return response                              
 
 def test_world_cup_name():
     response = requests.get(f"{BASE_URL}/competitions/WC", headers=HEADERS)
@@ -61,5 +69,5 @@ def test_la_liga_first_team_has_name():
     
 # Not Found negative test
 def test_unknown_league():
-    response = requests.get(f"{BASE_URL}/competitions/XXXX", headers=HEADERS)
+    response = get_with_retry(f"{BASE_URL}/competitions/XXXX", headers=HEADERS)
     assert response.status_code == 404
