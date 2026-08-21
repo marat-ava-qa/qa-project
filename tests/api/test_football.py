@@ -77,6 +77,6 @@ def test_la_liga_match_has_status():
     
 # APL
 def test_premier_league_match_has_status():
-    response = get_with_retry(f"{BASE_URL}/competitions/PD/matches", headers=HEADERS)
+    response = get_with_retry(f"{BASE_URL}/competitions/PL/matches", headers=HEADERS)
     data = response.json()
     assert "status" in data["matches"][0]
