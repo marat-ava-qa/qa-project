@@ -13,7 +13,7 @@ def get_with_retry(url, headers, retries=5):
             response = requests.get(url, headers=headers)
             if response.status_code != 429:         
                 return response
-        except requests.exceptions.RecursionExpection:   #network flaky
+        except requests.exceptions.RequestException:   # network flaky
             pass                                          #try again
         time.sleep(10)                            
     return response 
