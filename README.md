@@ -4,9 +4,11 @@
 
 📊 **[Live Allure Report](https://marat-ava-qa.github.io/qa-project/)**
 
-Python test automation framework for the FIFA World Cup 2026 API
-(football-data.org) and UI scenarios. Tests run automatically on every
-push via GitHub Actions, reports are published to GitHub Pages.
+Python test automation framework for football data APIs (football-data.org) —
+covering multiple competitions: FIFA World Cup, La Liga, Premier League, and
+Champions League. Includes API tests, UI tests, and retry logic for handling
+rate limits. Tests run automatically on every push via GitHub Actions, with
+reports published to GitHub Pages.
 
 ## Tech Stack
 
@@ -18,13 +20,17 @@ push via GitHub Actions, reports are published to GitHub Pages.
 
 ## Test Coverage
 
-**API (World Cup 2026):**
+**API (football-data.org):**
+- multiple competitions tested via parametrization (World Cup, La Liga, Premier League, Champions League)
 - status codes and response structure: /competitions, /teams, /matches
-- data validation: verify the tournament contains exactly 48 teams — the real-world format of World Cup 2026, the first tournament with the expanded field
+- data validation: verify each league has the correct number of teams
 - negative scenarios: unknown competition (404), request without token (401/403)
+- retry mechanism for API rate limiting (429) and network errors
+- fixtures to reduce duplicate API calls
 
 **UI (saucedemo.com):**
 - login flow: success, wrong password, element visibility
+- add to cart flow
 - Page Object Model, explicit waits (WebDriverWait)
 
 ## How to Run
@@ -44,4 +50,4 @@ pytest tests/ -v
 I'm Marat, a QA Automation Engineer and a lifelong football fan.
 I built this framework from scratch — Python, pytest, API and UI test
 layers, CI/CD pipeline with GitHub Actions, and live Allure reporting.
-Testing real World Cup 2026 data keeps the work genuinely interesting.
+Testing real football data keeps the work genuinely interesting.
