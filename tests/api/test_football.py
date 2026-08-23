@@ -73,3 +73,15 @@ def test_la_liga_teams_count(la_liga_teams):
 
 def test_la_liga_first_team_has_name(la_liga_teams):
     assert "name" in la_liga_teams["teams"][0]
+
+@pytest.fixture
+def la_liga_scorers():
+    response = get_with_retry(f"{BASE_URL}/competitions/PD/scorers", headers=HEADERS)
+    return response.json()
+
+def test_la_liga_scorers_not_empty(la_liga_scorers):
+    assert len(la_liga_scorers["scorers"]) > 0 
+    
+def test_la_liga_best_scorer(la_liga_scorers):
+    assert la_liga_scorers["scorers"][0]["goals"] >= 0
+    
