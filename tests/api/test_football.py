@@ -8,15 +8,15 @@ HEADERS = {"X-Auth-Token": TOKEN}
 BASE_URL = "https://api.football-data.org/v4"
 
 def get_with_retry(url, headers, retries=5):
-    for attempt in range(retries): 
-        try:            
+    for attempt in range(retries):
+        try:
             response = requests.get(url, headers=headers)
-            if response.status_code != 429:         
+            if response.status_code != 429:
                 return response
-        except requests.exceptions.RequestException:   # network flaky
-            pass                                          #try again
-        time.sleep(10)                            
-    return response 
+        except requests.exceptions.RequestException:
+            pass
+        time.sleep(15)                   
+    return response
 
 
 @pytest.mark.parametrize("league", ["WC", "PD", "PL", "CL"])
@@ -56,30 +56,20 @@ def test_teams_no_token():
     response = get_with_retry(f"{BASE_URL}/competitions/WC/teams", headers={})
     assert response.status_code in [401, 403]
     
-def test_match_has_status():
-    response = get_with_retry(f"{BASE_URL}/competitions/WC/matches", headers=HEADERS)
+@pytest.mark.parametrize("league", ["WC", "PD", "PL"])
+def test_match_has_status(league):
+    response = get_with_retry(f"{BASE_URL}/competitions/{league}/matches", headers=HEADERS)
     data = response.json()
     assert "status" in data["matches"][0]
-
+    
 # LA LIGA     
-def test_la_liga_teams_count():
+@pytest.fixture
+def la_liga_teams():
     response = get_with_retry(f"{BASE_URL}/competitions/PD/teams", headers=HEADERS)
-    data = response.json()
-    assert len(data["teams"]) == 20
-
-def test_la_liga_first_team_has_name():
-    response = get_with_retry(f"{BASE_URL}/competitions/PD/teams", headers=HEADERS)
-    data = response.json()
-    assert "name" in data["teams"][0]
+    return response.json()
     
+def test_la_liga_teams_count(la_liga_teams):
+    assert len(la_liga_teams["teams"]) == 20
 
-def test_la_liga_match_has_status():
-    response = get_with_retry(f"{BASE_URL}/competitions/PD/matches", headers=HEADERS)
-    data = response.json()
-    assert "status" in data["matches"][0]
-    
-# APL
-def test_premier_league_match_has_status():
-    response = get_with_retry(f"{BASE_URL}/competitions/PL/matches", headers=HEADERS)
-    data = response.json()
-    assert "status" in data["matches"][0]
+def test_la_liga_first_team_has_name(la_liga_teams):
+    assert "name" in la_liga_teams["teams"][0]
